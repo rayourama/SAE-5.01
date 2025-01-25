@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- supp des keywords  -->
+    <meta name="description" content="Le sélécteur multimodal pour la nourriture">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- "meta robots" -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebots" content="index, follow">
+
+    <title>Miam-O-Pedia</title>
+    <link rel="icon" href="../static/images/icon.png" type="image/png">
+    <link rel="stylesheet" href="../static/styles/template.css">
+    <link rel="stylesheet" href="../static/styles/item.css">
+    <link rel="stylesheet" href="../static/styles/modal.css">
+    
+</head>
+
+<body>
+    <!-- Barre supérieure -->
+    <div class="top-bar">
+        <div class="side-container">
+            <img src="../static/images/branding.png" alt="branding" class="branding">
+        </div>
+        <form class="search-form" onsubmit="event.preventDefault();">
+            <input type="text" id="search-bar" class="search-bar" placeholder="Search for food ..." oninput="search()">
+        </form>
+        <div class="side-container">
+            <button id="auth-button" class="button" style="width: 70%;" onclick="handleAuthButtonClick()">Connexion</button>
+        </div>
+    </div>
+
+    <!-- Mise en page principale -->
+    <div class="layout" id="layout">
+        <!-- Filtres à gauche -->
+        <div class="filters-left">
+
+            <!-- Séparateur -->
+            <div class="separator"> <span>Types de plats</span> </div>
+
+            <button class="button" onclick="filterResults('all')">Tout</button>
+            <button class="button" onclick="filterResults('entrée')">Entrées</button>
+            <button class="button" onclick="filterResults('plat')">Plats principaux</button>
+            <button class="button" onclick="filterResults('dessert')">Desserts</button>
+
+            <!-- Séparateur -->
+            <div class="separator"> <span>Options de tri</span> </div>
+
+            <div class="sort-controls">
+                <button class="button" id="sort-asc" onclick="sortItems('asc')">Trier A-Z</button>
+                <button class="button" id="sort-desc" onclick="sortItems('desc')">Trier Z-A</button>
+            </div>
+            <div class="bottom-left-image">
+                <img src="../static/images/icon.png" alt="logo">
+            </div>
+        </div>
+
+
+        <!-- Conteneur principal -->
+        <div class="item-container" id="item-container"></div>
+
+
+        <!-- Filtres à droite -->
+        <div class="filters-right" id="filters-right">
+
+            <!-- Séparateur -->
+            <div class="separator"><span>Utilisateur</span></div>
+            <button class="button" id="user-email-button"></button>
+
+            <!-- Séparateur -->
+            <div class="separator"><span>Options Utilisateur</span></div>
+
+            <button class="button" id="favorites-category" onclick="filterResults('favorites')">Favoris</button>
+            <button class="button" id="recommendations-category" onclick="filterResults('recommendations')">Recommandations</button>
+
+            <!-- Séparateur -->
+            <div class="separator"> <span>Options Utilisateur</span></div>
+
+            <button class="button" id="add-category-button" onclick="openCategoryModal()">Créer une catégorie</button>
+
+            <!-- Conteneur pour les catégories personnalisées -->
+            <div id="user-categories-container">
+                <!-- Les catégories personnalisées seront insérées ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Fenêtre modale pour créer une catégorie -->
+    <div id="modal-category" class="modal-category" onclick="outsideClickCategoryModal(event)">
+        <div class="modal-category-content">
+            <h3>Créer une nouvelle catégorie</h3>
+            <input type="text" id="modal-category-title" placeholder="Exemple : À tester"/>
+            <div class="message" id="modal-category-message"></div>
+
+            <div class="modal-category-actions">
+                <button class="button button-primary" onclick="submitCategoryFromModal()"
+                    style="margin: 0;">Créer</button>
+                <button class="button button-secondary" onclick="closeCategoryModal()"
+                    style="margin: 0;">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fenêtre modale pour confirmer la suppression -->
+    <div id="delete-category-modal" class="modal-category">
+        <div class="modal-category-content">
+            <h3>Supprimer la catégorie</h3>
+            <p id="delete-category-message">Voulez-vous vraiment supprimer cette catégorie ?</p>
+            <div class="modal-category-actions">
+                <button class="button button-danger" id="confirm-delete-category"
+                    style="margin: 0;">Supprimer</button>
+                <button class="button button-secondary" onclick="closeDeleteCategoryModal()"
+                    style="margin: 0;">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fenêtre modale -->
+    <div id="modal-item" class="modal-item" onclick="outsideItemClick(event)">
+        <div class="modal-item-container">
+            <img id="modal-item-image" class="img" src="" alt="">
+            <div class="modal-item-details" id="modal-item-details">
+                <h3 id="modal-item-title"></h3>
+                <div class="modal-item-description" id="modal-item-description">
+                    <div class="row">
+                        <!-- Saveurs -->
+                        <div class="modal-item-section">
+                            <div class="modal-item-section-title">
+                                <strong>Saveur :</strong>
+                            </div>
+                            <div id="modal-item-flavor" onclick="handleCategoryClick(this)"></div>
+                        </div>
+
+                        <!-- Types -->
+                        <div class="modal-item-section">
+                            <div class="modal-item-section-title">
+                                <strong>Type :</strong>
+                            </div>
+                            <div id="modal-item-type" onclick="handleCategoryClick(this)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Origines -->
+                    <div class="modal-item-section" style="width: auto" ;>
+                        <div class="modal-item-section-title">
+                            <strong>Origine :</strong>
+                        </div>
+                        <div id="modal-item-origin" onclick="handleCategoryClick(this)"></div>
+                    </div>
+
+                    <!-- Ingrédients -->
+                    <div class="modal-item-section-ingredients">
+                        <div class="modal-item-section-title">
+                            <strong>Ingrédients :</strong>
+                        </div>
+                        <div id="modal-item-ingredients"></div>
+                    </div>
+
+                    <div class="modal-item-actions">
+                        <!-- Bouton pour ajouter à une catégorie -->
+                        <div class="modal-item-category-action">
+                            <button class="button button-primary" id="add-to-category-btn" onclick="openCategoryDropdown()" disabled>Ajouter à une
+                                catégorie</button>
+                            <button class="button button-danger" id="remove-from-category-btn" onclick="removeFromCurrentCategory()"
+                                disabled>Supprimer de la catégorie</button>
+
+                            <div id="category-dropdown" class="category-dropdown" style="display: none;">
+                                <ul id="category-list">
+                                    <!-- Les catégories seront injectées ici -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Étoile favorite -->
+                        <div class="modal-item-star">
+                            <img onclick="toggleStar()" src="../static/images/star-gray.png" alt="Star"
+                                class="star-icon" id="favorite-star" disabled>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script src="../static/scripts/consts.js"></script>
+    <script src="../static/scripts/checkLogin.js"></script>
+    <script src="../static/scripts/research.js"></script>
+    <script src="../static/scripts/modal.js"></script>
+    <script src="../static/scripts/addCategories.js"></script>
+    <script src="../static/scripts/filter.js"></script>
+</body>
+
+</html>

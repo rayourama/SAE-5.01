@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un compte</title>
+    <link rel="stylesheet" href="../static/styles/auth.css">
+</head>
+
+<body>
+    <div class="header-text">
+        <p>Rejoignez-nous, c'est gratuit !</p>
+    </div>
+    <div class="auth-container">
+        <img src="../static/images/logo.png" alt="Image décorative" class="decorative-image">
+
+        <!-- Section droite : Formulaire de connexion -->
+        <div class="form-section">
+            <div class="form-container">
+                <h1>Créer un compte</h1>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Mot de passe" required>
+                <input type="password" id="register-confirm-password" placeholder="Confirmez le mot de passe" required>
+                <div class="message" id="register-message"></div>
+
+                <button onclick="registerUser()" class="login-button">S'inscrire</button>
+
+                <!-- Boutons de redirection -->
+                <button onclick="redirectToLogin()" class="redirection-button">
+                    Se connecter
+                </button>
+
+                <button onclick="redirectToTemplate()" class="redirection-button">
+                    Retour vers la page principale
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../static/scripts/consts.js"></script>
+    <script src="../static/scripts/auth.js"></script>
+    <script>
+        function redirectToTemplate() {
+            window.location.href = `${BASE_URL}/`
+        }
+        function redirectToLogin() {
+            window.location.href = `${BASE_URL}/login`
+        }
+    </script>
+</body>
+
+</html>

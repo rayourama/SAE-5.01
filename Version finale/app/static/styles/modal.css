@@ -1,0 +1,292 @@
+/* Fenêtre modal pour les plats */
+.modal-item {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-item-container {
+    flex-direction: column;
+    height: auto;
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+    border: none;
+    border-radius: 20px;
+    max-height: 90%;
+    display: flex;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: auto;
+}
+
+.modal-item-container .img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-item-container .modal-item-details  {
+    width: auto;
+    height: auto;
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-item-container .modal-item-details h3 {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-item-container .modal-item-details .modal-item-description .row {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+}
+
+.modal-item-container .modal-item-section, .modal-item-container .modal-item-section-ingredients {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 0.85em;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-item-container .modal-item-section-ingredients {
+    width: auto;
+    flex-direction: column;
+    align-items: normal;
+}
+
+.modal-item-container .modal-item-section-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
+.modal-item-container .modal-item-category {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #e0e7ff;
+    color: #1d4ed8;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 2px solid #3b82f6;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 3px 6px 3px 0;
+}
+
+.modal-item-container .modal-item-category:hover, .modal-item-container .modal-item-category-ingredients:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Conteneur pour l'étoile et le bouton "Ajouter à une catégorie" */
+.modal-item-actions {
+    height: auto;
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-item-category-action {
+    width: 90%;
+    text-align: center;
+    position: relative;
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+}
+
+/* Bouton pour ajouter à une catégorie */
+.modal-item-category-action > button {
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Dropdown pour les catégories */
+.category-dropdown {
+    width: 75%;
+    position: absolute;
+    bottom: 114%;
+    left: 0;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Liste des catégories */
+#category-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#category-list li {
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #e0e7ff;
+    color: #1d4ed8;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 2px solid #3b82f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 5px;
+}
+
+#category-list li:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+
+
+/* Empêche les effets hover et change le curseur sur les boutons désactivés */
+button:disabled,
+button[disabled] {
+    pointer-events: none; /* Désactive les interactions */
+    background-color: #ddd; /* Couleur de fond désactivée */
+    color: #aaa; /* Couleur du texte désactivée */
+    border-color: #ccc; /* Bordure désactivée */
+    cursor: not-allowed; /* Montre un curseur non autorisé */
+}
+
+.modal-item-star {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.star-icon {
+    width: 50px;
+    height: 50px;
+    transition: filter 0.2s ease;
+    cursor: pointer;
+}
+
+.star-icon.active {
+    filter: brightness(1.5);
+    content: url('../images/star-yellow.png');
+}
+
+/* Fenêtre modal pour créer une catégorie */
+
+.modal-category {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenu de la modale */
+.modal-category-content {
+    flex-direction: column;
+    height: auto;
+    background-color: #fff;
+    width: 90%;
+    width: 600px;
+    padding: 20px;
+    border: none;
+    border-radius: 20px;
+    max-height: 90%;
+    display: flex;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: auto;
+}
+
+/* Titre de la modale */
+.modal-category-content h3 {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Input de la modale */
+.modal-category-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.modal-category-content p {
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Boutons de la modale */
+.modal-category-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}

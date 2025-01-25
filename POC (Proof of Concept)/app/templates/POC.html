@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POC</title>
+    <link rel="stylesheet" href="../static/styles/POC.css">
+</head>
+<body>
+    <!-- Conteneur principal pour la barre de recherche -->
+    <div class="search-container">
+        <!-- Barre de recherche -->
+        <form class="search-form" onsubmit="event.preventDefault();">
+            <input type="text" id="search-bar" class="search-bar" placeholder="Rechercher..."  oninput="search()">
+        </form>
+    </div>
+
+    <!-- Conteneur pour les résultats -->
+    <div id="results-container" class="image-container"></div>
+
+    <!-- Script JavaScript -->
+    <script>
+        // Fonction de recherche
+        async function search() {
+            const query = document.getElementById('search-bar').value;
+
+            // Appelle l'API Flask pour obtenir les résultats
+            const response = await fetch(`http://localhost:5000/api/search?query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+
+            // Affiche les résultats
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = ''; // Vide les résultats précédents
+
+            if (data.length === 0) {
+                resultsContainer.innerHTML = '<p>Aucun résultat trouvé.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                const imagePath = `http://localhost:5000${item.image_path}`;
+
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <img src="${imagePath}" alt="${item.name}" class="result-image">
+                    <h3>${item.name}</h3>
+                    <p><strong>Saveur :</strong> ${item.flavor}</p>
+                    <p><strong>Type :</strong> ${item.type}</p>
+                    <p><strong>Origine :</strong> ${item.origin}</p>
+                    <p><strong>Ingrédients :</strong> ${item.ingredients}</p>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+        // Affiche tout les plats de la base de données
+        search();
+    </script>
+</body>
+</html>

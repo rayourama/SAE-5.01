@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version fonctionnelle</title>
+    <link rel="stylesheet" href="../static/styles/template.css">
+</head>
+<body>
+    <table>
+        <tr>
+            <!-- Barre latérale -->
+            <td class="sidebar sidebar-top">
+                <h2>InnovAction</h2>
+                <div class="logo">
+                    <p>Logo</p>
+                </div>
+            </td>
+
+            <!-- Contenu principal -->
+            <td class="search-section">
+                <form class="search-form" onsubmit="event.preventDefault();">
+                    <input type="text" id="search-bar" class="search-bar" placeholder="Search for food ..." oninput="search()">
+                    <button type="submit" class="search-button" aria-label="Search">
+                        <img src="../static/images/loupe.png" alt="Search">
+                    </button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td class="sidebar">
+                <button class="filtre" onclick="filterResults('all')">Tout</button>
+                <button class="filtre" onclick="filterResults('entrée')">Entrées</button>
+                <button class="filtre" onclick="filterResults('plat')">Plats principaux</button>
+                <button class="filtre" onclick="filterResults('dessert')">Desserts</button>
+            </td>
+            <td style="width: 80%;">
+                <!-- Conteneur pour les résultats -->
+                <div id="results-container" class="results-container"></div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Fenêtre modale -->
+    <div id="modal" class="modal" onclick="outsideClick(event)">
+        <div class="modal-container">
+            <img id="modal-image" src="" alt="">
+            <div class="modal-details" id="modal-details">
+                <h3 id="modal-title"></h3>
+                <div class="modal-description" id="modal-description">
+                    <div class="row">
+                        <div class="modal-section">
+                            <div class="modal-section-title">
+                                <strong>Saveur :</strong>
+                            </div> 
+                            <div class="modal-category" id="modal-flavor" onclick="handleCategoryClick(this)"></div>
+                        </div>
+
+                        <div class="modal-section">
+                            <div class="modal-section-title">
+                                <strong>Type :</strong> 
+                            </div>
+                            <div class="modal-category" id="modal-type" onclick="handleCategoryClick(this)"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-section" style="width: auto";>
+                        <div class="modal-section-title">
+                            <strong>Origine :</strong> 
+                        </div>
+                        <div class="modal-category" id="modal-origin" onclick="handleCategoryClick(this)"></div>
+                    </div>
+
+                    <div class="modal-section-ingredients">
+                        <div class="modal-section-title">
+                            <strong>Ingrédients :</strong>
+                        </div>
+                        <div id="modal-ingredients"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script>
+        // Fonction de recherche
+        async function search(query = null) {
+            const searchBar = document.getElementById('search-bar');
+            if (query) {
+                searchBar.value = query; // Remplit la barre de recherche avec le terme cliqué
+            }
+            const queryValue = searchBar.value;
+            fetchResults(queryValue);
+        }
+
+        // Fonction pour filtrer les résultats par type
+        async function filterResults(type) {
+            fetchResults('', type);
+        }
+
+        // Fonction pour gérer les clics sur les catégories et ingrédients
+        function handleCategoryClick(element) {
+            const query = element.textContent.trim(); // Récupère le texte du bouton cliqué
+            search(query); // Lance une recherche avec ce texte
+            closeModal(); // Ferme la fenêtre modale
+        }
+
+        // Fonction pour récupérer et afficher les résultats
+        async function fetchResults(query = '', filterType = 'all') {
+            // Crée l'URL avec le paramètre query et filterType
+            let url = `http://localhost:5000/api/search?query=${encodeURIComponent(query)}&type=${encodeURIComponent(filterType)}`;
+
+            // Appelle l'API Flask pour obtenir les résultats
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // Affiche les résultats dans le conteneur
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = ''; // Vide les résultats précédents
+
+            if (data.length === 0) {
+                resultsContainer.innerHTML = '<p>Aucun résultat trouvé.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                const imagePath = `http://localhost:5000${item.image_path}`;
+
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <img src="${imagePath}" alt="${item.name}" class="result-image" onclick="openModal('${imagePath}', '${item.name}', '${item.flavor}', '${item.type}', '${item.origin}', \`${item.ingredients}\`)">
+                    <h3>${item.name}</h3>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // Fonction pour ouvrir la fenêtre modale
+        function openModal(imagePath, name, flavor, type, origin, ingredients) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalFlavor = document.getElementById('modal-flavor');
+            const modalType = document.getElementById('modal-type');
+            const modalOrigin = document.getElementById('modal-origin');
+            const modalIngredients = document.getElementById('modal-ingredients');
+
+            modalImage.src = imagePath;
+            modalTitle.textContent = name;
+            modalFlavor.textContent = flavor;
+            modalType.textContent = type;
+            modalOrigin.textContent = origin;
+            modalIngredients.innerHTML = ingredients.split(', ').map(ing => `<span class='modal-category-ingredients' onclick="handleCategoryClick(this)">${ing}</span>`).join('');
+            modal.style.display = 'flex';
+        }
+
+        // Fonction pour fermer la fenêtre modale
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'none';
+        }
+
+        // Fonction pour fermer la fenêtre modale en cliquant en dehors de celle-ci
+        function outsideClick(event) {
+            const modal = document.getElementById('modal');
+            const modalContent = document.querySelector('.modal-container');
+            if (event.target === modal && !modalContent.contains(event.target)) {
+                closeModal();
+            }
+        }
+
+        // Affiche tous les plats de la base de données
+        fetchResults();
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+/* Conteneur principal */
+.admin-container {
+    /* max-width: 1200px; */
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Titre */
+.admin-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Bouton Ajouter */
+.button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Table */
+#food-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#food-table th,
+#food-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+#food-table th {
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+}
+
+#food-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#food-table tr:hover {
+    background-color: #ddd;
+}
+
+/* Boutons Modifier et Supprimer */
+#food-table button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#food-table button:first-child {
+    background-color: #28a745;
+    color: white;
+}
+
+#food-table button:first-child:hover {
+    background-color: #218838;
+}
+
+#food-table button:last-child {
+    background-color: #dc3545;
+    color: white;
+}
+
+#food-table button:last-child:hover {
+    background-color: #c82333;
+}
+
+/* Images */
+#food-table img {
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Fond du modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Contenu du modal */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Bouton de fermeture */
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ff0000;
+}
+
+/* Titre du modal */
+#modal-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Champs de formulaire */
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Bouton du formulaire */
+.modal-content button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s ease;
+    /* width: 100%; */
+}
+
+.modal-content button:hover {
+    background-color: #218838;
+}

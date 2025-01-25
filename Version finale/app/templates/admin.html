@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version fonctionnelle - Administration</title>
+
+    <link rel="stylesheet" href="../static/styles/admin.css">
+
+    <style>
+        #root {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <!-- Barre supérieure -->
+        <div class="top-bar">
+            <div class="auth-container">
+                <button id="auth-button" class="button" onclick="handleAuthButtonClick()">Déconnexion</button>
+            </div>
+        </div>
+
+        <!-- Mise en page principale -->
+        <div class="layout" id="layout">
+            <div class="admin-container">
+                <h1>Gestion des Plats</h1>
+                <button class="button" onclick="openAddModal()">Ajouter un plat</button>
+                <table id="food-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Saveur</th>
+                            <th>Type</th>
+                            <th>Origine</th>
+                            <th>Ingrédients</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Modal pour ajouter/modifier un plat -->
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2 id="modal-title">Ajouter un plat</h2>
+                    <input type="hidden" id="food-id">
+                    <input type="text" id="food-name" placeholder="Nom du plat">
+                    <input type="text" id="food-flavor" placeholder="Saveur">
+                    <input type="text" id="food-type" placeholder="Type">
+                    <input type="text" id="food-origin" placeholder="Origine">
+                    <input type="text" id="food-ingredients" placeholder="Ingrédients">
+                    
+                    <!-- <input type="text" id="food-image-path" placeholder="Chemin de l'image"> -->
+                    <input type="file" id="food-image" accept="image/png, image/jpeg, image/jpg">
+
+                    <button onclick="saveFood()">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script src="../static/scripts/consts.js"></script>
+    <script src="../static/scripts/admin_load.js"></script>
+</body>
+
+</html>
